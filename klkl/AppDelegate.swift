@@ -24,6 +24,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func handlerEvent(aEvent: (NSEvent!)) -> Void {
         setShortCut(NSEventModifierFlags.CommandKeyMask.rawValue, app_name: "Google Chrome", aEvent: aEvent)
         setShortCut(NSEventModifierFlags.ShiftKeyMask.rawValue, app_name: "iTerm", aEvent: aEvent)
+        setShortCut(NSEventModifierFlags.AlternateKeyMask.rawValue, app_name: "RubyMine", aEvent: aEvent)
+        setShortCut(NSEventModifierFlags.FunctionKeyMask.rawValue, app_name: "Finder", aEvent: aEvent)
+        setShortCut(NSEventModifierFlags.ControlKeyMask.rawValue, app_name: "Slack", aEvent: aEvent)
         lastPressedKey = aEvent.modifierFlags.rawValue
     }
     

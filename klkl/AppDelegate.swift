@@ -17,17 +17,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(aNotification: NSNotification) {
                 NSEvent.addGlobalMonitorForEventsMatchingMask(NSEventMask.FlagsChangedMask, handler: handlerEvent)
     }
+
     var prevTimeInterval = 0.0
+    var lastPressedKey: UInt = 0
     
     func handlerEvent(aEvent: (NSEvent!)) -> Void {
         setShortCut(NSEventModifierFlags.CommandKeyMask.rawValue, app_name: "Google Chrome", aEvent: aEvent)
         setShortCut(NSEventModifierFlags.ShiftKeyMask.rawValue, app_name: "iTerm", aEvent: aEvent)
+        lastPressedKey = aEvent.modifierFlags.rawValue
     }
     
     func setShortCut(key_uint: UInt, app_name: NSString, aEvent: NSEvent) {
         if aEvent.modifierFlags.rawValue & key_uint > 0 {
             println("key pressed")
-            if (aEvent.timestamp - prevTimeInterval < 0.2) {
+            if (aEvent.timestamp - prevTimeInterval < 0.2 && lastPressedKey & aEvent.modifierFlags.rawValue == 0) {
                 println( "double key pressed" );
                 if theWorkspace.launchApplication(app_name as String){
                     NSLog("OK")

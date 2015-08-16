@@ -18,12 +18,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 NSEvent.addGlobalMonitorForEventsMatchingMask(NSEventMask.FlagsChangedMask, handler: handlerEvent)
     }
     var prevTimeInterval = 0.0
+    
     func handlerEvent(aEvent: (NSEvent!)) -> Void {
-        if aEvent.modifierFlags.rawValue & NSEventModifierFlags.CommandKeyMask.rawValue > 0 {
-            println("command")
+        setShortCut(NSEventModifierFlags.CommandKeyMask.rawValue, app_name: "Google Chrome", aEvent: aEvent)
+        setShortCut(NSEventModifierFlags.ShiftKeyMask.rawValue, app_name: "iTerm", aEvent: aEvent)
+    }
+    
+    func setShortCut(key_uint: UInt, app_name: NSString, aEvent: NSEvent) {
+        if aEvent.modifierFlags.rawValue & key_uint > 0 {
+            println("key pressed")
             if (aEvent.timestamp - prevTimeInterval < 0.2) {
-                println( "double Command was pressed" );
-                if theWorkspace.launchApplication("Google Chrome"){
+                println( "double key pressed" );
+                if theWorkspace.launchApplication(app_name as String){
                     NSLog("OK")
                 } else {
                     NSLog("NO")

@@ -12,10 +12,18 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var window: NSWindow!
+    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-2)
+
     let theWorkspace : NSWorkspace = NSWorkspace.sharedWorkspace()
-    
+
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-                NSEvent.addGlobalMonitorForEventsMatchingMask(NSEventMask.FlagsChangedMask, handler: handlerEvent)
+        NSEvent.addGlobalMonitorForEventsMatchingMask(NSEventMask.FlagsChangedMask, handler: handlerEvent)
+        if let button = statusItem.button {
+            button.image = NSImage(named: "cyclone")
+        }
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "Quit klkl", action: Selector("terminate:"), keyEquivalent: "q"))
+        statusItem.menu = menu
     }
 
     var prevTimeInterval = 0.0

@@ -11,6 +11,7 @@
 		5F00BD6F1B7FBCB9001C7F72 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F00BD6E1B7FBCB9001C7F72 /* Images.xcassets */; };
 		5F00BD721B7FBCB9001C7F72 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F00BD701B7FBCB9001C7F72 /* MainMenu.xib */; };
 		5F00BD7E1B7FBCB9001C7F72 /* klklTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F00BD7D1B7FBCB9001C7F72 /* klklTests.swift */; };
+		5FE99B251B80D64F00CCBFFF /* cyclone.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FE99B241B80D64F00CCBFFF /* cyclone.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +33,7 @@
 		5F00BD771B7FBCB9001C7F72 /* klklTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = klklTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F00BD7C1B7FBCB9001C7F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F00BD7D1B7FBCB9001C7F72 /* klklTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = klklTests.swift; sourceTree = "<group>"; };
+		5FE99B241B80D64F00CCBFFF /* cyclone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cyclone.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 			children = (
 				5F00BD6C1B7FBCB9001C7F72 /* AppDelegate.swift */,
 				5F00BD6E1B7FBCB9001C7F72 /* Images.xcassets */,
+				5FE99B241B80D64F00CCBFFF /* cyclone.png */,
 				5F00BD701B7FBCB9001C7F72 /* MainMenu.xib */,
 				5F00BD6A1B7FBCB9001C7F72 /* Supporting Files */,
 			);
@@ -188,6 +191,7 @@
 			files = (
 				5F00BD6F1B7FBCB9001C7F72 /* Images.xcassets in Resources */,
 				5F00BD721B7FBCB9001C7F72 /* MainMenu.xib in Resources */,
+				5FE99B251B80D64F00CCBFFF /* cyclone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +400,7 @@
 				5F00BD831B7FBCB9001C7F72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5F00BD841B7FBCB9001C7F72 /* Build configuration list for PBXNativeTarget "klklTests" */ = {
 			isa = XCConfigurationList;
@@ -404,6 +409,7 @@
 				5F00BD861B7FBCB9001C7F72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

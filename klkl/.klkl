@@ -1,0 +1,10 @@
+{
+  "interval": 0.09,
+  "apps": {
+    "cmd": "Google Chrome",
+    "alt": "Kobito",
+     "fn": "Finder",
+   "ctrl": "Slack",
+  "shift": "iTerm"
+  }
+} 

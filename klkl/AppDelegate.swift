@@ -29,6 +29,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     var prevTimeInterval = 0.0
+    var interval = Double()
+    
     var lastPressedKey: UInt = 0
     var modifierKeyDict = Dictionary<UInt, String>()
     var simulKeyPressedCountAtLast: Int = 0 // 最後のイベント発生時に同時に押されていた修飾キーの数
@@ -71,9 +73,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func doubleKeyPressed？(aEvent: NSEvent) -> Bool {
         let theLastKeyIsTheSameKey: Bool = lastPressedKey == aEvent.modifierFlags.rawValue
-        let intervalIsShort: Bool = aEvent.timestamp - prevTimeInterval < 0.2
+        let intervalIsShort: Bool = aEvent.timestamp - prevTimeInterval < interval
 
         if (theLastKeyIsTheSameKey && intervalIsShort) {
+            print(interval)
+            print (aEvent.timestamp - prevTimeInterval)
             print( "the same key pressed twice" )
             return true
         } else {
@@ -94,16 +98,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let configData = NSData(contentsOfFile:path)
             let configDict = try NSJSONSerialization.JSONObjectWithData(configData!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
             for key in ["cmd", "alt", "shift", "fn", "ctrl"] {
-                print(key, configDict![key])
-                appDict[key] = configDict![key] as? String
+                print(key, configDict!["apps"]![key])
+                appDict[key] = configDict!["apps"]![key] as? String
             }
-            setConfig(appDict)
+            let intervalFromConfigFile:Double = configDict!["interval"] as! Double
+            setConfig(appDict, intervalFromConfigFile: intervalFromConfigFile)
         } catch {
             print("error")
         }
     }
     
-    func setConfig(appDict:Dictionary<String, String>) -> Void {
+    func setConfig(appDict:Dictionary<String, String>, intervalFromConfigFile:Double) -> Void {
+        interval = intervalFromConfigFile
+        
         modifierKeyDict = [
             NSEventModifierFlags.CommandKeyMask.rawValue: appDict["cmd"]!,
             NSEventModifierFlags.ShiftKeyMask.rawValue: appDict["shift"]!,

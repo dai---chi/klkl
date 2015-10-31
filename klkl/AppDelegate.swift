@@ -48,12 +48,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         // 「何も押されていない状態から1つ修飾キーが押された状態になった」かどうか
-        let singleKeyPressed？ = simulKeyPressedCountAtLast == 0 && simulKeyPressedCount == 1
+        let isSingleKeyPressed = simulKeyPressedCountAtLast == 0 && simulKeyPressedCount == 1
 
-        if (singleKeyPressed？) {
+        if (isSingleKeyPressed) {
             singleKeyPressed(aEvent)
             
-            if( doubleKeyPressed？(aEvent) ) {
+            if( isDoubleKeyPressed(aEvent) ) {
                 openApp(app_name)
             }
         }
@@ -71,7 +71,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func doubleKeyPressed？(aEvent: NSEvent) -> Bool {
+    func isDoubleKeyPressed(aEvent: NSEvent) -> Bool {
         let theLastKeyIsTheSameKey: Bool = lastPressedKey == aEvent.modifierFlags.rawValue
         let intervalIsShort: Bool = aEvent.timestamp - prevTimeInterval < interval
 

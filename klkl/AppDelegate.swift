@@ -28,31 +28,69 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var prevTimeInterval = 0.0
     var lastPressedKey: UInt = 0
+    let modifierKeyArray: [UInt: String] = [
+        NSEventModifierFlags.CommandKeyMask.rawValue: "Google Chrome",
+        NSEventModifierFlags.ShiftKeyMask.rawValue: "iTerm",
+        NSEventModifierFlags.AlternateKeyMask.rawValue: "Kobito",
+        NSEventModifierFlags.FunctionKeyMask.rawValue: "Finder",
+        NSEventModifierFlags.ControlKeyMask.rawValue: "Slack",
+    ]
+
+    var simulKeyPressedCountAtLast: Int = 0 // 最後のイベント発生時に同時に押されていた修飾キーの数
     
     func handlerEvent(aEvent: (NSEvent!)) -> Void {
-        setShortCut(NSEventModifierFlags.CommandKeyMask.rawValue, app_name: "Google Chrome", aEvent: aEvent)
-        setShortCut(NSEventModifierFlags.ShiftKeyMask.rawValue, app_name: "iTerm", aEvent: aEvent)
-        setShortCut(NSEventModifierFlags.AlternateKeyMask.rawValue, app_name: "RubyMine", aEvent: aEvent)
-        setShortCut(NSEventModifierFlags.FunctionKeyMask.rawValue, app_name: "Finder", aEvent: aEvent)
-        setShortCut(NSEventModifierFlags.ControlKeyMask.rawValue, app_name: "Slack", aEvent: aEvent)
-        lastPressedKey = aEvent.modifierFlags.rawValue
+        print("=======event=======")
+        var simulKeyPressedCount:Int = 0 // 同時に押されている修飾キーの数
+        var app_name = ""
+        
+        for key in modifierKeyArray.keys {
+            if (aEvent.modifierFlags.rawValue & key > 0) {
+                simulKeyPressedCount += 1
+                app_name = modifierKeyArray[key]!
+            }
+        }
+        
+        // 「何も押されていない状態から1つ修飾キーが押された状態になった」かどうか
+        let singleKeyPressed？ = simulKeyPressedCountAtLast == 0 && simulKeyPressedCount == 1
+
+        if (singleKeyPressed？) {
+            singleKeyPressed(aEvent)
+            
+            if( doubleKeyPressed？(aEvent) ) {
+                openApp(app_name)
+            }
+        }
+
+        print("同時に押されている修飾キーの数", simulKeyPressedCount)
+        simulKeyPressedCountAtLast = simulKeyPressedCount
+        prevTimeInterval = aEvent.timestamp;
     }
     
-    func setShortCut(key_uint: UInt, app_name: NSString, aEvent: NSEvent) {
-        if aEvent.modifierFlags.rawValue & key_uint > 0 {
-            println("key pressed")
-            if (aEvent.timestamp - prevTimeInterval < 0.2 && lastPressedKey & aEvent.modifierFlags.rawValue == 0) {
-                println( "double key pressed" );
-                if theWorkspace.launchApplication(app_name as String){
-                    NSLog("OK")
-                } else {
-                    NSLog("NO")
-                }
-            }
-            prevTimeInterval = aEvent.timestamp;
+    func openApp(app_name: String) {
+        if theWorkspace.launchApplication(app_name){
+            print("opened the App")
+        } else {
+            print("coudn't open the App")
         }
     }
     
+    func doubleKeyPressed？(aEvent: NSEvent) -> Bool {
+        let theLastKeyIsTheSameKey: Bool = lastPressedKey == aEvent.modifierFlags.rawValue
+        let intervalIsShort: Bool = aEvent.timestamp - prevTimeInterval < 0.2
+
+        if (theLastKeyIsTheSameKey && intervalIsShort) {
+            print( "the same key pressed twice" )
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func singleKeyPressed(aEvent: NSEvent) {
+        print("single key pressed")
+        lastPressedKey = aEvent.modifierFlags.rawValue
+    }
+
 //    func applicationWillTerminate(aNotification: NSNotification) {
 //        Insert code here to tear down your application
 //    }

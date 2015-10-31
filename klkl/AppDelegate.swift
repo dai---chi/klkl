@@ -23,6 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Quit klkl", action: Selector("terminate:"), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Reload config", action: Selector("restartApp:"), keyEquivalent: ""))
         statusItem.menu = menu
         
         readConfig()
@@ -118,6 +119,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSEventModifierFlags.FunctionKeyMask.rawValue: appDict["fn"]!,
             NSEventModifierFlags.ControlKeyMask.rawValue: appDict["ctrl"]!,
         ]
+    }
+
+    @IBAction func restartApp(sender: NSButton) -> Void {
+        let task = NSTask()
+        task.launchPath = "/bin/sh"
+        task.arguments = ["-c", "sleep 0.2; open \"\(NSBundle.mainBundle().bundlePath)\""]
+        task.launch()
+        NSApplication.sharedApplication().terminate(nil)
     }
 
 //    func applicationWillTerminate(aNotification: NSNotification) {

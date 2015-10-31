@@ -24,18 +24,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Quit klkl", action: Selector("terminate:"), keyEquivalent: "q"))
         statusItem.menu = menu
+        
+        readConfig()
     }
 
     var prevTimeInterval = 0.0
     var lastPressedKey: UInt = 0
-    let modifierKeyArray: [UInt: String] = [
-        NSEventModifierFlags.CommandKeyMask.rawValue: "Google Chrome",
-        NSEventModifierFlags.ShiftKeyMask.rawValue: "iTerm",
-        NSEventModifierFlags.AlternateKeyMask.rawValue: "Kobito",
-        NSEventModifierFlags.FunctionKeyMask.rawValue: "Finder",
-        NSEventModifierFlags.ControlKeyMask.rawValue: "Slack",
-    ]
-
+    var modifierKeyDict = Dictionary<UInt, String>()
     var simulKeyPressedCountAtLast: Int = 0 // 最後のイベント発生時に同時に押されていた修飾キーの数
     
     func handlerEvent(aEvent: (NSEvent!)) -> Void {
@@ -43,10 +38,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var simulKeyPressedCount:Int = 0 // 同時に押されている修飾キーの数
         var app_name = ""
         
-        for key in modifierKeyArray.keys {
+        for key in modifierKeyDict.keys {
             if (aEvent.modifierFlags.rawValue & key > 0) {
                 simulKeyPressedCount += 1
-                app_name = modifierKeyArray[key]!
+                app_name = modifierKeyDict[key]!
             }
         }
         
@@ -89,6 +84,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func singleKeyPressed(aEvent: NSEvent) {
         print("single key pressed")
         lastPressedKey = aEvent.modifierFlags.rawValue
+    }
+    
+    func readConfig() {
+        let path = NSHomeDirectory() + "/.klkl"
+        var appDict = Dictionary<String, String>()
+        
+        do {
+            let configData = NSData(contentsOfFile:path)
+            let configDict = try NSJSONSerialization.JSONObjectWithData(configData!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+            for key in ["cmd", "alt", "shift", "fn", "ctrl"] {
+                print(key, configDict![key])
+                appDict[key] = configDict![key] as? String
+            }
+            setConfig(appDict)
+        } catch {
+            print("error")
+        }
+    }
+    
+    func setConfig(appDict:Dictionary<String, String>) -> Void {
+        modifierKeyDict = [
+            NSEventModifierFlags.CommandKeyMask.rawValue: appDict["cmd"]!,
+            NSEventModifierFlags.ShiftKeyMask.rawValue: appDict["shift"]!,
+            NSEventModifierFlags.AlternateKeyMask.rawValue: appDict["alt"]!,
+            NSEventModifierFlags.FunctionKeyMask.rawValue: appDict["fn"]!,
+            NSEventModifierFlags.ControlKeyMask.rawValue: appDict["ctrl"]!,
+        ]
     }
 
 //    func applicationWillTerminate(aNotification: NSNotification) {
